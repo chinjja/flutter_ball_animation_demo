@@ -11,8 +11,7 @@ class Ball {
   final double radius;
   final Color color;
   Vector vector;
-  late double _distance;
-  late double _velocity;
+  late Vector _distance;
 
   Ball({
     required this.current,
@@ -20,18 +19,16 @@ class Ball {
     required this.color,
     required this.vector,
   }) {
-    _velocity = rand.nextDouble() * 0.1;
     _update();
   }
 
-  double get distance => _distance;
   double duration(Size size) {
-    final diff = target - current;
-    final offset = Offset(
-      size.width * (diff.x + _velocity),
-      size.height * (diff.y + _velocity),
+    final offset = target - current;
+    final d = Offset(
+      size.width * offset.x,
+      size.height * offset.y,
     );
-    return offset.distance;
+    return d.distance / vector.norm();
   }
 
   factory Ball.random() {
@@ -47,10 +44,7 @@ class Ball {
         rand.nextDouble() * 2 - 1,
         rand.nextDouble() * 2 - 1,
       ),
-      vector: Vector(
-        (rand.nextDouble() - 0.5) * 0.1,
-        (rand.nextDouble() - 0.5) * 0.1,
-      ),
+      vector: _randomVector(),
     );
   }
 
@@ -61,19 +55,36 @@ class Ball {
       vector = Vector.unitX.reflect(vector);
     }
     _update();
-    while (distance < 0.01) {
-      vector = Vector(
-        (rand.nextDouble() - 0.5) * 0.1,
-        (rand.nextDouble() - 0.5) * 0.1,
-      );
+    while (_distance.dot(_distance) < 0.05) {
+      vector = _randomVector();
       _update();
     }
+  }
+
+  static Vector _randomVector() {
+    var dx = rand.nextDouble() * 2 - 1;
+    var dy = rand.nextDouble() * 2 - 1;
+    if (dx.abs() < 0.1) {
+      if (dx >= 0) {
+        dx = 0.1;
+      } else {
+        dx = -0.1;
+      }
+    }
+    if (dy.abs() < 0.1) {
+      if (dy >= 0) {
+        dy = 0.1;
+      } else {
+        dy = -0.1;
+      }
+    }
+    return Vector(dx, dy);
   }
 
   void _update() {
     final clipped = vector.clipped(current.toVector());
     target = Alignment(clipped.x, clipped.y);
 
-    _distance = (current - target).toVector().norm();
+    _distance = (current - target).toVector();
   }
 }
