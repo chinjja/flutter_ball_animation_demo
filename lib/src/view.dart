@@ -124,9 +124,10 @@ class _BallWidgetState extends State<BallWidget>
         end: ball.target,
       ),
     );
+    final size = context.findAncestorWidgetOfExactType<MediaQuery>()!.data.size;
+    final duration = ball.duration(size);
     _controller.reset();
-    _controller.duration =
-        Duration(milliseconds: (ball.velocity * 1000).toInt());
+    _controller.duration = Duration(milliseconds: duration.toInt());
     _controller.forward();
   }
 }
