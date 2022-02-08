@@ -28,13 +28,6 @@ class _MyAnimatedViewState extends State<MyAnimatedView> {
 
   @override
   Widget build(BuildContext context) {
-    final children = <Widget>[];
-    for (int i = 0; i < balls.length; i++) {
-      children.add(BallWidget(
-        key: ValueKey(i),
-        ball: balls[i],
-      ));
-    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Ball Animation Demo'),
@@ -47,8 +40,23 @@ class _MyAnimatedViewState extends State<MyAnimatedView> {
           )
         ],
       ),
-      body: Stack(
-        children: children,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final children = <Widget>[];
+          for (int i = 0; i < balls.length; i++) {
+            children.add(BallWidget(
+              key: ValueKey(i),
+              ball: balls[i],
+              size: Size(
+                constraints.maxWidth,
+                constraints.maxHeight,
+              ),
+            ));
+          }
+          return Stack(
+            children: children,
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => setState(() {
@@ -62,7 +70,9 @@ class _MyAnimatedViewState extends State<MyAnimatedView> {
 
 class BallWidget extends StatefulWidget {
   final Ball ball;
-  const BallWidget({Key? key, required this.ball}) : super(key: key);
+  final Size size;
+  const BallWidget({Key? key, required this.ball, required this.size})
+      : super(key: key);
 
   @override
   _BallWidgetState createState() => _BallWidgetState();
@@ -124,8 +134,7 @@ class _BallWidgetState extends State<BallWidget>
         end: ball.target,
       ),
     );
-    final size = context.findAncestorWidgetOfExactType<MediaQuery>()!.data.size;
-    final duration = ball.duration(size);
+    final duration = ball.duration(widget.size);
     _controller.reset();
     _controller.duration = Duration(milliseconds: duration.toInt());
     _controller.forward();
