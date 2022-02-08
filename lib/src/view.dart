@@ -30,7 +30,7 @@ class _MyAnimatedViewState extends State<MyAnimatedView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ball Animation Demo'),
+        title: Text('Ball Animation Demo (${balls.length})'),
         actions: [
           IconButton(
             onPressed: () => setState(() {
