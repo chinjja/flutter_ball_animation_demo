@@ -20,11 +20,19 @@ class Ball {
     required this.color,
     required this.vector,
   }) {
+    _velocity = rand.nextDouble() * 0.1;
     _update();
   }
 
   double get distance => _distance;
-  double get velocity => _velocity;
+  double duration(Size size) {
+    final diff = target - current;
+    final offset = Offset(
+      size.width * (diff.x + _velocity),
+      size.height * (diff.y + _velocity),
+    );
+    return offset.distance;
+  }
 
   factory Ball.random() {
     return Ball(
@@ -67,6 +75,5 @@ class Ball {
     target = Alignment(clipped.x, clipped.y);
 
     _distance = (current - target).toVector().norm();
-    _velocity = _distance + rand.nextDouble();
   }
 }
