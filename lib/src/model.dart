@@ -55,7 +55,7 @@ class Ball {
       vector = Vector.unitX.reflect(vector);
     }
     _update();
-    while (_distance.dot(_distance) < 0.05) {
+    while (_distance.dot(_distance) < 0.01) {
       vector = _randomVector();
       _update();
     }
