@@ -55,7 +55,7 @@ class Ball {
       vector = Vector.unitX.reflect(vector);
     }
     _update();
-    while (_distance.dot(_distance) < 0.05) {
+    while (_distance.dot(_distance) < 0.01) {
       vector = _randomVector();
       _update();
     }
@@ -82,9 +82,25 @@ class Ball {
   }
 
   void _update() {
-    final clipped = vector.clipped(current.toVector());
+    final clipped = _clipped(current.toVector());
     target = Alignment(clipped.x, clipped.y);
 
     _distance = (current - target).toVector();
+  }
+
+  Vector _clipped(Vector origin) {
+    final n = vector.normalized();
+    final dirX = Vector.unitX.dot(n);
+    final dirY = Vector.unitY.dot(n);
+
+    final lx = dirX >= 0 ? 1 : -1;
+    final ly = dirY >= 0 ? 1 : -1;
+    final t1 = (lx - origin.x) / vector.x;
+    final t2 = (ly - origin.y) / vector.y;
+    if (t1.abs() < t2.abs()) {
+      return origin + vector * t1;
+    } else {
+      return origin + vector * t2;
+    }
   }
 }
