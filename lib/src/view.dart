@@ -36,7 +36,7 @@ class _MyAnimatedViewState extends State<MyAnimatedView> {
             onPressed: () => setState(() {
               balls.clear();
             }),
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
           )
         ],
       ),
@@ -62,7 +62,7 @@ class _MyAnimatedViewState extends State<MyAnimatedView> {
         onPressed: () => setState(() {
           balls.add(Ball.random());
         }),
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -102,6 +102,14 @@ class _BallWidgetState extends State<BallWidget>
       },
     );
     _runAnimation();
+  }
+
+  @override
+  void didUpdateWidget(covariant BallWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.size != widget.size) {
+      _runAnimation();
+    }
   }
 
   @override
