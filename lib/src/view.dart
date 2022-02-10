@@ -36,7 +36,7 @@ class _MyAnimatedViewState extends State<MyAnimatedView> {
             onPressed: () => setState(() {
               balls.clear();
             }),
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
           )
         ],
       ),
@@ -62,7 +62,7 @@ class _MyAnimatedViewState extends State<MyAnimatedView> {
         onPressed: () => setState(() {
           balls.add(Ball.random());
         }),
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
