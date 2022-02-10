@@ -105,6 +105,14 @@ class _BallWidgetState extends State<BallWidget>
   }
 
   @override
+  void didUpdateWidget(covariant BallWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.size != widget.size) {
+      _runAnimation();
+    }
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
